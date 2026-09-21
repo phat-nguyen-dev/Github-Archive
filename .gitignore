@@ -1,1 +1,10 @@
+# Data
+data/
 
+# Environment variables
+.env
+
+# DBT generated directories
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
