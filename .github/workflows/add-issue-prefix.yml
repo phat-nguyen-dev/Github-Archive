@@ -1,0 +1,29 @@
+name: Auto Issue Number Prefix
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-prefix:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add prefix with issue number
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const prefix = `[GHA-${issue.number}]`;
+            
+            // Kiểm tra xem tiêu đề đã có tiền tố này chưa
+            if (!issue.title.includes(`[GHA-${issue.number}]`)) {
+              const newTitle = `${prefix} ${issue.title}`;
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                title: newTitle
+              });
+            }
